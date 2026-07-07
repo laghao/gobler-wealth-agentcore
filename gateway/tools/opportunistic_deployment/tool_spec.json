@@ -1,0 +1,51 @@
+[
+  {
+    "name": "opportunistic_deployment",
+    "description": "Monitors a watchlist of equities/indices for drawdowns from all-time highs and triggers tranche-buy alerts at -20%/-30%/-40% bands. Sizes tranches against available cash, attaches expiry rules and technical-analysis markers, and always requires human approval before execution.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "watchlist": {
+          "type": "array",
+          "description": "Instruments to evaluate for opportunistic deployment.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "symbol": { "type": "string", "description": "Ticker, e.g. 'NVDA', 'AMZN'." },
+              "current_price": { "type": "number" },
+              "all_time_high": { "type": "number" },
+              "rsi_14": { "type": "number", "description": "Optional 14-period RSI (0..100)." },
+              "sma_200": { "type": "number", "description": "Optional 200-day simple moving average." }
+            },
+            "required": ["symbol", "current_price", "all_time_high"]
+          }
+        },
+        "available_cash": {
+          "type": "number",
+          "description": "Cash reserve available for deployment in account currency."
+        },
+        "tranche_bands": {
+          "type": "array",
+          "description": "Drawdown bands (as positive fractions) and the fraction of cash to deploy at each. Default: [{drawdown:0.20,deploy:0.25},{0.30,0.35},{0.40,0.40}].",
+          "items": {
+            "type": "object",
+            "properties": {
+              "drawdown": { "type": "number", "description": "Drawdown from ATH as a positive fraction, e.g. 0.20 for -20%." },
+              "deploy_fraction": { "type": "number", "description": "Fraction of available cash to deploy at this band (0..1)." }
+            },
+            "required": ["drawdown", "deploy_fraction"]
+          }
+        },
+        "expiry_days": {
+          "type": "integer",
+          "description": "Number of days a triggered tranche alert remains valid (default 5)."
+        },
+        "as_of_date": {
+          "type": "string",
+          "description": "Evaluation date, ISO 8601 (YYYY-MM-DD). Defaults to today (UTC)."
+        }
+      },
+      "required": ["watchlist", "available_cash"]
+    }
+  }
+]

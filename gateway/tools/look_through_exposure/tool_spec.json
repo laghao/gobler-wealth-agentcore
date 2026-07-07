@@ -1,0 +1,44 @@
+[
+  {
+    "name": "look_through_exposure",
+    "description": "Decomposes ETFs and funds into their true underlying holdings, aggregates real exposure per issuer/sector/region across the whole portfolio, and flags hidden concentration and correlated clusters. Returns a diversification sub-score (0-100).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "holdings": {
+          "type": "array",
+          "description": "Portfolio positions. ETFs/funds are decomposed via their constituents.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "symbol": { "type": "string", "description": "Ticker or ISIN, e.g. 'IVV' or 'NVDA'." },
+              "type": { "type": "string", "enum": ["etf", "fund", "stock", "cash"], "description": "Instrument type." },
+              "weight": { "type": "number", "description": "Portfolio weight as a fraction 0..1. Either weight or market_value is required." },
+              "market_value": { "type": "number", "description": "Position market value in account currency (alternative to weight)." },
+              "constituents": {
+                "type": "array",
+                "description": "Optional known constituents for an ETF/fund. If omitted, the tool uses its built-in reference map when available.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "symbol": { "type": "string" },
+                    "weight": { "type": "number", "description": "Constituent weight within the fund, fraction 0..1." },
+                    "sector": { "type": "string" },
+                    "region": { "type": "string" }
+                  },
+                  "required": ["symbol", "weight"]
+                }
+              }
+            },
+            "required": ["symbol", "type"]
+          }
+        },
+        "concentration_threshold": {
+          "type": "number",
+          "description": "True single-issuer weight above which a concentration flag is raised (fraction 0..1, default 0.10)."
+        }
+      },
+      "required": ["holdings"]
+    }
+  }
+]

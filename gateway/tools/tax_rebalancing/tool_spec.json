@@ -1,0 +1,45 @@
+[
+  {
+    "name": "tax_rebalancing",
+    "description": "Monitors portfolio drift vs target weights and proposes tax-aware rebalancing trades. Prefers tax-loss harvesting and applies German \u00a723 EStG private-sale holding-period logic per lot. Output is formatted for Trade Republic and always requires human approval before execution.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "positions": {
+          "type": "array",
+          "description": "Current positions, one entry per tax lot for correct \u00a723 EStG holding-period evaluation.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "symbol": { "type": "string", "description": "Ticker or ISIN." },
+              "quantity": { "type": "number" },
+              "cost_basis": { "type": "number", "description": "Total cost basis for this lot in account currency." },
+              "market_value": { "type": "number", "description": "Current market value of this lot in account currency." },
+              "acquired_date": { "type": "string", "description": "Lot acquisition date, ISO 8601 (YYYY-MM-DD)." }
+            },
+            "required": ["symbol", "quantity", "cost_basis", "market_value", "acquired_date"]
+          }
+        },
+        "target_weights": {
+          "type": "object",
+          "description": "Map of symbol -> target portfolio weight (fraction 0..1). Must sum to ~1.0.",
+          "additionalProperties": { "type": "number" }
+        },
+        "drift_threshold": {
+          "type": "number",
+          "description": "Absolute weight drift (fraction) that triggers a rebalance proposal for a symbol (default 0.05)."
+        },
+        "as_of_date": {
+          "type": "string",
+          "description": "Evaluation date, ISO 8601 (YYYY-MM-DD). Defaults to today (UTC)."
+        },
+        "jurisdiction": {
+          "type": "string",
+          "enum": ["DE"],
+          "description": "Tax jurisdiction. Only 'DE' (German \u00a723 EStG) is implemented in v1."
+        }
+      },
+      "required": ["positions", "target_weights"]
+    }
+  }
+]
