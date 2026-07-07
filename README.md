@@ -6,7 +6,7 @@ Gobler ingests a portfolio of stocks, ETFs, and cash and does the unglamorous co
 
 It is built on **[Strands Agents](https://strandsagents.com)** for the agent loop and **[Amazon Bedrock AgentCore](https://aws.amazon.com/bedrock/agentcore/)** for the production scaffolding (Runtime, Gateway, Memory, Identity, Code Interpreter, Observability), fronted by a Cognito-authenticated React app on Amplify Hosting. Nothing leaves your AWS account.
 
-> This project is built on top of AWS's open-source **Fullstack AgentCore Solution Template (FAST)** — the CDK stack, the Cognito/M2M auth wiring, and the React chat UI come from FAST (Apache-2.0). Gobler is what you get when you strip FAST's sample tool and drop in a real, opinionated use case. A detailed architectural write-up will go up on my blog at [oussamabenlagha.de](http://oussamabenlagha.de).
+> This project is built on top of AWS's open-source **Fullstack AgentCore Solution Template (FAST)** — the CDK stack, the Cognito/M2M auth wiring, and the React chat UI come from FAST (Apache-2.0). Gobler is what you get when you strip FAST's sample tool and drop in a real, opinionated use case. A detailed architectural write-up is on my blog: [Building Gobler: a Tax-Aware Wealth Agent on Strands + AgentCore](http://oussamabenlagha.de/gobler-wealth-agentcore.html).
 
 ---
 
